@@ -1,0 +1,20 @@
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vault
+  namespace: openshift-gitops  # Change to the namespace where ArgoCD is installed (typically "argocd")
+spec:
+  project: default  # ArgoCD project
+  source:
+    repoURL: 'https://github.com/muneerkh/fayaaz-app.git'  # Replace with your Git repo URL
+    targetRevision: main  # Branch to track
+    path: vault  # Path within the repo for environment-specific Kustomize overlay
+  destination:
+    server: 'https://kubernetes.default.svc'  # Cluster API endpoint
+  syncPolicy:
+    automated:
+      prune: true  # Automatically remove resources that are no longer in Git
+      selfHeal: true  # Reverts changes made directly in the cluster
+    syncOptions:
+    - CreateNamespace=true
