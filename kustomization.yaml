@@ -3,7 +3,7 @@ kind: Kustomization
 
 # Define resources to be applied in one command
 resources:
-- manifests/namespace.yaml
+#- manifests/namespace.yaml
 - manifests/service-account.yaml
 - manifests/configmap.yaml
 - manifests/deployment.yaml
