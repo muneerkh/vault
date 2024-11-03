@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: 'https://github.com/muneerkh/vault.git'  # Replace with your Git repo URL
     targetRevision: main  # Branch to track
-    path: .  # Path within the repo for environment-specific Kustomize overlay
+    path: vault  # Path within the repo for environment-specific Kustomize overlay
   destination:
     server: 'https://kubernetes.default.svc'  # Cluster API endpoint
   syncPolicy:
