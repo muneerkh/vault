@@ -2,41 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vault
-  namespace: vault
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: vault
   template:
-    metadata:
-      labels:
-        app: vault
     spec:
-      serviceAccountName: vault
+      securityContext:
+        fsGroup: 100
       containers:
-      - name: vault
-        image: hashicorp/vault:1.12.0
-        args:
-          - "server"
-          - "-config=/vault/config/vault-config.hcl"
-        env:
-          - name: VAULT_DEV_ROOT_TOKEN_ID
-            value: "root-token"
-          - name: VAULT_ADDR
-            value: "http://127.0.0.1:8200"
-        ports:
-          - containerPort: 8200
-            name: http
-        volumeMounts:
-          - name: config
-            mountPath: /vault/config
-          - name: vault-data
-            mountPath: /vault/data
+        - name: vault
+          securityContext:
+            capabilities:
+              add: ["IPC_LOCK", "SETFCAP"]
+            runAsUser: 100
+            runAsNonRoot: true
+            readOnlyRootFilesystem: false
+          volumeMounts:
+            - name: vault-config
+              mountPath: /vault/config
+            - name: vault-data
+              mountPath: /vault/data
       volumes:
-        - name: config
+        - name: vault-config
           configMap:
             name: vault-config
         - name: vault-data
           persistentVolumeClaim:
-            claimName: vault-data-pvc  # Use the PVC created above
+            claimName: vault-data # Make sure you have this PVC created

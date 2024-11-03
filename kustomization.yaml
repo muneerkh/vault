@@ -6,6 +6,9 @@ namespace: vault
 resources:
   - manifest/namespace.yaml
   - manifest/service-account.yaml
+  - manifest/role.yaml
+  - manifest/rolebinding.yaml
+  - manifest/pvc.yaml
   - manifest/deployment.yaml
   - manifest/service.yaml
   - manifest/route.yaml
