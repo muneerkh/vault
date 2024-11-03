@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# Define resources to be applied in one command
+# Define resources
 resources:
   - manifest/namespace.yaml
   - manifest/service-account.yaml
@@ -13,10 +13,10 @@ resources:
 # ConfigMap Generator for Vault Config
 configMapGenerator:
   - name: vault-config
-    behavior: replace        # Ensure any existing ConfigMap is replaced
+    behavior: replace        # Replace any existing ConfigMap with the same name
     files:
       - config/vault-config.hcl
 
-# Label all resources for easier management
-commonLabels:
+# Labels for all resources
+labels:
   app: vault
