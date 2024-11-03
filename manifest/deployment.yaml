@@ -38,4 +38,5 @@ spec:
           configMap:
             name: vault-config
         - name: vault-data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: vault-data-pvc  # Use the PVC created above
