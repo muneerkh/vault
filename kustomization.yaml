@@ -2,19 +2,25 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: vault
-# Define resources
-resources:
-- manifest/namespace.yaml
-- manifest/service-account.yaml
-# - manifest/configmap.yaml
-- manifest/deployment.yaml
-- manifest/service.yaml
-- manifest/route.yaml
 
-# ConfigMap Generator for Vault Config
+resources:
+  - manifest/namespace.yaml
+  - manifest/service-account.yaml
+  - manifest/deployment.yaml
+  - manifest/service.yaml
+  - manifest/route.yaml
+
 configMapGenerator:
   - name: vault-config
-    behavior: replace
-    files:
-      - config/vault-config.hcl
-
+    behavior: create
+    literals:
+      - config.hcl=|
+          ui = true
+          listener "tcp" {
+            address     = "0.0.0.0:8200"
+            tls_disable = 1
+          }
+          storage "file" {
+            path = "/vault/data"
+          }
+          disable_mlock = true
